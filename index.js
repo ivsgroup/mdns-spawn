@@ -21,7 +21,6 @@ var MDNS_Spawn = exports.MDNS_Spawn = new Class({
   },
 
   stop : function(){
-    console.log("STOPPING");
 
     if(!this._proc)
       return;
@@ -32,7 +31,7 @@ var MDNS_Spawn = exports.MDNS_Spawn = new Class({
 
 
   _resolve :  function resolve(service_name, service_type, domain, callback ){ 
-    console.log("Resolving '%s' type '%s' under '%s'", service_name, service_type, domain);
+    //console.log("Resolving '%s' type '%s' under '%s'", service_name, service_type, domain);
 
     var lookup = cp.spawn("dns-sd", ["-L ", service_name, service_type, domain]);
     var splitter = new RegExp(service_name + ".*can be reached at\\s+(.*?):([0-9]+)");
