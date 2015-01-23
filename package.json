@@ -1,0 +1,26 @@
+{
+  "name": "mdns-spawn",
+  "version": "0.0.0",
+  "description": "Bonjour discovery",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ivsgroup/mdns-spawn.git"
+  },
+  "keywords": [
+    "mdns",
+    "bonjour",
+    "dns-sd"
+  ],
+  "author": "Francois Leurent <fleurent@ivsweb.com>",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/ivsgroup/mdns-spawn/issues"
+  },
+  "dependencies": {
+    "nyks": "~0.1.12"
+  }
+}
