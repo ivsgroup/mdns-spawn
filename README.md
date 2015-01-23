@@ -1,10 +1,13 @@
 # MDNS spawn 
 
-
+# Installation
+```
+npm install mdns-spawn
+```
 
 # Usage sample
 ```
-var MDNS_Spawn = require('./mdns_spawn.js').MDNS_Spawn;
+var MDNS_Spawn = require('mdns-spawn');
 
 var browser = new MDNS_Spawn();
 browser.addEvent('serviceUp', function(service){

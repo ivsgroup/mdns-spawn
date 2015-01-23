@@ -8,7 +8,7 @@ RegExp.escape = function(str){ // from stack
 
 
 
-var MDNS_Spawn = exports.MDNS_Spawn = new Class({
+var MDNS_Spawn = module.exports = new Class({
   Implements : [Events],
   Binds : ['stop', 'start'],
 
