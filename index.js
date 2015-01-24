@@ -47,7 +47,7 @@ var MDNS_Spawn = module.exports = new Class({
         return;
       lookup.kill();
       var res = splitter.exec(data);
-      callback(null, {host:res[1], port:res[2]});
+      callback(null, {host:res[1], port:Number(res[2])});
     });
   },
 
