@@ -2,7 +2,9 @@ require("nyks");
 var cp = require("child_process");
 
 RegExp.escape = function(str){ // from stack
-  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  str = str.replace(/ /g, "\\032");
+  str = str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  return str;
 }
 
 
@@ -33,8 +35,10 @@ var MDNS_Spawn = module.exports = new Class({
   _resolve :  function resolve(service_name, service_type, domain, callback ){ 
     //console.log("Resolving '%s' type '%s' under '%s'", service_name, service_type, domain);
 
-    var lookup = cp.spawn("dns-sd", ["-L ", service_name, service_type, domain]);
-    var splitter = new RegExp(service_name + ".*can be reached at\\s+(.*?):([0-9]+)");
+    var reg = [ RegExp.escape(service_name), "\\.", RegExp.escape(service_type), RegExp.escape(domain), "\\s+", "can be reached at\\s+(.*?):([0-9]+)" ],
+        lookup = cp.spawn("dns-sd", ["-L ", service_name, service_type, domain]);
+
+    var splitter = new RegExp(reg.join(''));
 
     setTimeout(lookup.kill.bind(lookup), 1000 * 2);
 
@@ -52,10 +56,9 @@ var MDNS_Spawn = module.exports = new Class({
     var self = this,
         reg = ["^.*", "(Add|Rmv).*",  RegExp.escape(this._domain), "\\s+", 
               RegExp.escape(this._service_type), "\\s+",
-              "(ivs-cs-device-[a-f0-9]+)"];
+              "(.*)"];
 
-
-    this._proc = cp.spawn("dns-sd", ["-B"]);
+    this._proc = cp.spawn("dns-sd", ["-B", this._service_type, this._domain]);
 
     var splitter = new RegExp(reg.join('')); 
     var buffer = "";
