@@ -50,7 +50,6 @@ var MDNS_Spawn = module.exports = new Class({
       var res = splitter.exec(data);
 
       self._resolve_hostname(res[1], function(err, host_addr){
-      console.log(host_addr);
         callback(null, {host:host_addr,hostname: res[1], port:Number(res[2])});
       });
     });
