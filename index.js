@@ -32,10 +32,11 @@ var MDNS_Spawn = module.exports = new Class({
   },
 
 
-  _resolve :  function resolve(service_name, service_type, domain, callback ){ 
+  _resolve_service :  function(service_name, service_type, domain, callback ) {
     //console.log("Resolving '%s' type '%s' under '%s'", service_name, service_type, domain);
 
-    var reg = [ RegExp.escape(service_name), "\\.", RegExp.escape(service_type), RegExp.escape(domain), "\\s+", "can be reached at\\s+(.*?):([0-9]+)" ],
+    var self = this,
+        reg = [ RegExp.escape(service_name), "\\.", RegExp.escape(service_type), RegExp.escape(domain), "\\s+", "can be reached at\\s+(.*?):([0-9]+)" ],
         lookup = cp.spawn("dns-sd", ["-L ", service_name, service_type, domain]);
 
     var splitter = new RegExp(reg.join(''));
@@ -47,9 +48,33 @@ var MDNS_Spawn = module.exports = new Class({
         return;
       lookup.kill();
       var res = splitter.exec(data);
-      callback(null, {host:res[1], port:Number(res[2])});
+
+      self._resolve_hostname(res[1], function(err, host_addr){
+      console.log(host_addr);
+        callback(null, {host:host_addr,hostname: res[1], port:Number(res[2])});
+      });
     });
   },
+
+ _resolve_hostname : function(host_name, callback){
+    if(! host_name.stripEnd(".").endsWith(".local"))
+      return callback(null, host_name);
+
+    var self = this,
+        reg = [ RegExp.escape(host_name), "\\.?\\s+", "([0-9.]+)" ],
+        lookup = cp.spawn("dns-sd", ["-G ", "v4", host_name]);
+
+    var splitter = new RegExp(reg.join(''));
+    setTimeout(lookup.kill.bind(lookup), 1000 * 2);
+
+    lookup.stdout.on("data", function(data){
+      if(!splitter.test(data))
+        return;
+      lookup.kill();
+      var res = splitter.exec(data);
+      callback(null, res[1]);
+    });
+ },
 
 
   start : function(){
@@ -79,7 +104,7 @@ var MDNS_Spawn = module.exports = new Class({
 
         var service =  {service_name: service_name};
         if(operation == "Add")
-          self._resolve(service_name, self._service_type, self._domain, function(err, result){
+          self._resolve_service(service_name, self._service_type, self._domain, function(err, result){
             service.target  = result;
             self.fireEvent(MDNS_Spawn.EVENT_SERVICE_UP, service);
           });
