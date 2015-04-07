@@ -81,6 +81,8 @@ var MDNS_Spawn = module.exports = new Class({
         reg = ["^.*", "(Add|Rmv).*",  RegExp.escape(this._domain), "\\s+", 
               RegExp.escape(this._service_type), "\\s+",
               "(.*)"];
+    if(this._proc)
+      return; //already running !
 
     this._proc = cp.spawn("dns-sd", ["-B", this._service_type, this._domain]);
 
