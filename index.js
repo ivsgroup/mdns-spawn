@@ -22,6 +22,10 @@ var MDNS_Spawn = module.exports = new Class({
     this._domain = domain ||  "local.";
   },
 
+  spawnErrorHandler: function(err){
+    this.fireEvent(MDNS_Spawn.EVENT_DNSSD_ERROR, err);
+  },
+
   stop : function(){
 
     if(!this._proc)
@@ -43,6 +47,7 @@ var MDNS_Spawn = module.exports = new Class({
 
     setTimeout(lookup.kill.bind(lookup), 1000 * 2);
 
+    lookup.on('error', this.spawnErrorHandler.bind(this));
     lookup.stdout.on("data", function(data){
       if(!splitter.test(data))
         return;
@@ -66,6 +71,7 @@ var MDNS_Spawn = module.exports = new Class({
     var splitter = new RegExp(reg.join(''));
     setTimeout(lookup.kill.bind(lookup), 1000 * 2);
 
+    lookup.on('error', this.spawnErrorHandler.bind(this));
     lookup.stdout.on("data", function(data){
       if(!splitter.test(data))
         return;
@@ -89,6 +95,7 @@ var MDNS_Spawn = module.exports = new Class({
     var splitter = new RegExp(reg.join('')); 
     var buffer = "";
 
+    this._proc.on('error', this.spawnErrorHandler.bind(this));
     this._proc.stdout.on("data", function(data){
       buffer += data;
 
@@ -121,7 +128,7 @@ var MDNS_Spawn = module.exports = new Class({
 
 });
 
-
+MDNS_Spawn.EVENT_DNSSD_ERROR = 'dnssdError';
 MDNS_Spawn.EVENT_SERVICE_UP = 'serviceUp';
 MDNS_Spawn.EVENT_SERVICE_DOWN = 'serviceDown';
 
