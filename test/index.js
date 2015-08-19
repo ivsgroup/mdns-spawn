@@ -1,5 +1,5 @@
 'use strict';
-var expect = require('expect.js'); // pourquoi il faux que je mette le .js
+var expect = require('expect.js');
 var cp     = require('child_process');
 var once     = require('nyks/function/once');
 
