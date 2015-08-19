@@ -1,5 +1,9 @@
-require("nyks");
 var cp = require("child_process");
+var endsWith = require("mout/string/endsWith");
+var stripEnd = require("nyks/string/stripEnd");
+
+var Class = require("uclass"),
+    Events = require('uclass/events');
 
 RegExp.escape = function(str){ // from stack
   str = str.replace(/ /g, "\\032");
@@ -61,7 +65,7 @@ var MDNS_Spawn = module.exports = new Class({
   },
 
  _resolve_hostname : function(host_name, callback){
-    if(! host_name.stripEnd(".").endsWith(".local"))
+    if(! endsWith(stripEnd(host_name, "."), ".local"))
       return callback(null, host_name);
 
     var self = this,
@@ -104,7 +108,7 @@ var MDNS_Spawn = module.exports = new Class({
       buffer = buffer.substr(i+1);
       var blocs = tmp.split("\n");
 
-      Array.each(blocs, function(block){
+      blocs.forEach(function(block){
         if(!splitter.test(block))
           return;
         var res = splitter.exec(block);
