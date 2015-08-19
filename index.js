@@ -26,7 +26,8 @@ var MDNS_Spawn = module.exports = new Class({
     this._domain = domain ||  "local.";
   },
 
-  spawnErrorHandler: function(err){
+    
+  spawnErrorHandler: /* istanbul ignore next */ function(err){
     this.fireEvent(MDNS_Spawn.EVENT_DNSSD_ERROR, err);
   },
 
@@ -53,6 +54,7 @@ var MDNS_Spawn = module.exports = new Class({
 
     lookup.on('error', this.spawnErrorHandler.bind(this));
     lookup.stdout.on("data", function(data){
+        /* istanbul ignore if */
       if(!splitter.test(data))
         return;
       lookup.kill();
@@ -65,6 +67,7 @@ var MDNS_Spawn = module.exports = new Class({
   },
 
  _resolve_hostname : function(host_name, callback){
+    /* istanbul ignore next */
     if(! endsWith(stripEnd(host_name, "."), ".local"))
       return callback(null, host_name);
 
@@ -77,6 +80,7 @@ var MDNS_Spawn = module.exports = new Class({
 
     lookup.on('error', this.spawnErrorHandler.bind(this));
     lookup.stdout.on("data", function(data){
+      /* istanbul ignore if */
       if(!splitter.test(data))
         return;
       lookup.kill();
