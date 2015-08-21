@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "mout": "^0.11.0",
-    "nyks": "1.0.3"
+    "nyks": "1.0.3",
+    "uclass": "2.0.2"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",

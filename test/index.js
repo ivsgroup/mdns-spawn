@@ -46,15 +46,7 @@ describe("Initial test suite for mdns-spawn", function(){
 		browser.stop();
 		expect(browser._proc).not.to.be.ok();
 
-	})
-
-		it("kill with error" , function(){
-
-		var browser = new MDNS_Spawn();
-		browser.start();
-		browser._proc.kill(0) ;
-
-	})
+	});
 
 });
 
