@@ -1,3 +1,5 @@
+"use strict";
+
 var cp = require("child_process");
 var endsWith = require("mout/string/endsWith");
 var stripEnd = require("nyks/string/stripEnd");
