@@ -1,6 +1,6 @@
 {
   "name": "mdns-spawn",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Bonjour discovery",
   "main": "index.js",
   "scripts": {
