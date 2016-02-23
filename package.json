@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "mout": "^0.11.0",
-    "nyks": "^2.6.1",
+    "nyks": "^2.9.0",
     "uclass": "^2.0.7"
   },
   "devDependencies": {
