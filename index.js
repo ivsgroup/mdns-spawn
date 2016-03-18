@@ -47,15 +47,20 @@ var MDNS_Spawn = module.exports = new Class({
   _resolve_service :  function(service_name, service_type, domain, callback ) {
     //console.log("Resolving '%s' type '%s' under '%s'", service_name, service_type, domain);
 
+    callback = once(callback);
+
     var self = this,
         reg = [ RegExp.escape(service_name), "\\.", RegExp.escape(service_type), RegExp.escape(domain), "\\s+", "can be reached at\\s+(.*?):([0-9]+)" ],
         lookup = cp.spawn("dns-sd", ["-L ", service_name, service_type, domain]);
 
     var splitter = new RegExp(reg.join(''));
 
-    setTimeout(lookup.kill.bind(lookup), 1000 * 2);
+    setTimeout(function() {
+        lookup.kill();
+        callback("Resolve servicetimeout");
+    }, 1000 * 2);
 
-    lookup.on('error', this.spawnErrorHandler.bind(this));
+    //lookup.on('error', this.spawnErrorHandler.bind(this));
     lookup.stdout.on("data", function(data){
         /* istanbul ignore if */
       if(!splitter.test(data))
