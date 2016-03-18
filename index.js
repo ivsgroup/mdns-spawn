@@ -2,6 +2,7 @@
 
 var cp = require("child_process");
 var endsWith = require("mout/string/endsWith");
+var once = require("nyks/function/once");
 var stripEnd = require("nyks/string/stripEnd");
 
 var Class = require("uclass"),
@@ -62,25 +63,32 @@ var MDNS_Spawn = module.exports = new Class({
       lookup.kill();
       var res = splitter.exec(data);
 
-      self._resolve_hostname(res[1], function(err, host_addr){
+      self.resolve_hostname(res[1], function(err, host_addr){
+        /* istanbul ignore if  */
+        if(err)
+          return callback(err);
         callback(null, {host:host_addr,hostname: res[1], port:Number(res[2])});
       });
     });
   },
 
- _resolve_hostname : function(host_name, callback){
+  resolve_hostname : function(host_name, callback){
     /* istanbul ignore next */
     if(! endsWith(stripEnd(host_name, "."), ".local"))
       return callback(null, host_name);
 
+    callback = once(callback);
     var self = this,
         reg = [ RegExp.escape(host_name), "\\.?\\s+", "([0-9.]+)" ],
         lookup = cp.spawn("dns-sd", ["-G ", "v4", host_name]);
 
     var splitter = new RegExp(reg.join(''));
-    setTimeout(lookup.kill.bind(lookup), 1000 * 2);
+    setTimeout(function() {
+        lookup.kill();
+        callback("Lookup hostname timeout");
+    }, 1000 * 2);
 
-    lookup.on('error', this.spawnErrorHandler.bind(this));
+//    lookup.on('error', Function.prototype);
     lookup.stdout.on("data", function(data){
       /* istanbul ignore if */
       if(!splitter.test(data))
@@ -89,7 +97,7 @@ var MDNS_Spawn = module.exports = new Class({
       var res = splitter.exec(data);
       callback(null, res[1]);
     });
- },
+  },
 
 
   start : function(){
@@ -123,7 +131,9 @@ var MDNS_Spawn = module.exports = new Class({
         var service =  {service_name: service_name};
         if(operation == "Add")
           self._resolve_service(service_name, self._service_type, self._domain, function(err, result){
-            service.target  = result;
+            /* istanbul ignore else */
+            if(!err) 
+              service.target  = result;
             self.fireEvent(MDNS_Spawn.EVENT_SERVICE_UP, service);
           });
 
