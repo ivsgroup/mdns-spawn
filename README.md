@@ -1,5 +1,9 @@
 # MDNS spawn 
 
+[![Version](https://img.shields.io/npm/v/mdns-spawn.svg)](https://www.npmjs.com/package/mdns-spawn)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+
+
 # Installation
 ```
 npm install mdns-spawn
