@@ -4,6 +4,7 @@
   "description": "Bonjour discovery",
   "main": "index.js",
   "scripts": {
+    "mocha": "mocha",
     "test": " node node_modules/istanbul/lib/cli.js  cover node_modules/mocha/bin/_mocha test/"
   },
   "repository": {
@@ -24,14 +25,15 @@
     "url": "https://github.com/ivsgroup/mdns-spawn/issues"
   },
   "dependencies": {
-    "mout": "^0.11.0",
-    "nyks": "^2.9.0",
-    "uclass": "^2.0.7"
+    "async": "^2.0.1",
+    "mout": "^1.0.0",
+    "nyks": "^3.10.1",
+    "uclass": "^2.4.0"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
-    "mocha": "^2.2.5",
-    "istanbul": "~0.3.18"
+    "istanbul": "^0.4.5",
+    "mocha": "^3.1.2"
   },
   "maintainers": [
     {
