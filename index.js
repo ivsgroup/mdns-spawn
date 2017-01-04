@@ -116,6 +116,7 @@ var MDNS_Spawn = module.exports = new Class({
     this._proc = null;
   },
 
+  resolve_hostname : resolve_hostnameq,
 
   start : function(){
     var self = this,
