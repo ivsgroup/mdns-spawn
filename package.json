@@ -27,8 +27,7 @@
   "dependencies": {
     "async": "^2.0.1",
     "mout": "^1.0.0",
-    "nyks": "^3.10.1",
-    "uclass": "^2.4.0"
+    "nyks": "^3.10.1"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",

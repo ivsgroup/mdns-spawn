@@ -1,8 +1,7 @@
 "use strict";
 
 const cp = require('child_process');
-const Class = require('uclass');
-const Events = require('uclass/events');
+const Events = require('events');
 
 const queue  = require('async/queue');
 
@@ -89,36 +88,31 @@ const resolve_serviceq = throttle(resolve_service, 5);
 
 
 
+class MDNS_Spawn extends Events.EventEmitter {
 
-var MDNS_Spawn = module.exports = new Class({
-  Implements : [Events],
-  Binds : ['stop', 'start'],
-
-  _proc : null,
-  _service_type : null,
-  _domain : null,
-  initialize:function(service_type, domain){
+  constructor(service_type, domain){
+    super();
+    this._proc         = null;
+    this._service_type = null;
+    this._domain       = null;
     this._service_type = service_type ||  "_http._tcp.";
     this._domain = domain ||  "local.";
-  },
-
+    this.resolve_hostname = resolve_hostnameq;
+  }
     
-  spawnErrorHandler: /* istanbul ignore next */ function(err){
-    this.fireEvent(MDNS_Spawn.EVENT_DNSSD_ERROR, err);
-  },
+  spawnErrorHandler(err) /* istanbul ignore next */ {
+    this.emit(MDNS_Spawn.EVENT_DNSSD_ERROR, err);
+  }
 
-  stop : function(){
-
+  stop(){
     if(!this._proc)
       return;
 
     this._proc.kill();
     this._proc = null;
-  },
+  }
 
-  resolve_hostname : resolve_hostnameq,
-
-  start : function(){
+  start(){
     var self = this,
         reg = ["^.*", "(Add|Rmv).*",  RegExp.escape(this._domain), "\\s+", 
               RegExp.escape(this._service_type), "\\s+",
@@ -152,21 +146,22 @@ var MDNS_Spawn = module.exports = new Class({
             /* istanbul ignore else */
             if(!err) 
               service.target  = result;
-            self.fireEvent(MDNS_Spawn.EVENT_SERVICE_UP, service);
+            self.emit(MDNS_Spawn.EVENT_SERVICE_UP, service);
           });
 
         if(operation == "Rmv")
-          self.fireEvent(MDNS_Spawn.EVENT_SERVICE_DOWN,service);
+          self.emit(MDNS_Spawn.EVENT_SERVICE_DOWN,service);
 
       });
 
     });
 
-  },
+  }
 
-});
+};
 
 MDNS_Spawn.EVENT_DNSSD_ERROR = 'dnssdError';
 MDNS_Spawn.EVENT_SERVICE_UP = 'serviceUp';
 MDNS_Spawn.EVENT_SERVICE_DOWN = 'serviceDown';
 
+module.exports = MDNS_Spawn;
