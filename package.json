@@ -4,8 +4,8 @@
   "description": "Bonjour discovery",
   "main": "index.js",
   "scripts": {
-    "jscs": "jscs --config=node_modules/ivs-jssc/ivs-node.jscsrc index.js",
-    "jshint": "eslint --config=node_modules/ivs-jssc/ivs-node.eslintrc index.js",
+    "jscs": "jscs --config=node_modules/ivs-jssc/ivs-node.jscsrc index.js register.js",
+    "jshint": "eslint --config=node_modules/ivs-jssc/ivs-node.eslintrc.js index.js register.js",
     "checkall": "npm run jscs && npm run jshint",
     "mocha": "mocha",
     "test": " node node_modules/istanbul/lib/cli.js  cover node_modules/mocha/bin/_mocha test/"
