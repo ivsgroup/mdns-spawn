@@ -1,9 +1,12 @@
 'use strict';
-var expect = require('expect.js');
-var cp     = require('child_process');
-var once     = require('nyks/function/once');
 
-var	MDNS_Spawn = require('../');
+
+const expect = require('expect.js');
+const cp     = require('child_process');
+const once     = require('nyks/function/once');
+
+const MDNS_Spawn = require('../');
+const DNS_SD = "dns-sd.exe";
 
 
 describe("Initial test suite for mdns-spawn", function(){
@@ -26,14 +29,14 @@ describe("Initial test suite for mdns-spawn", function(){
       });
 
       browser.on('serviceUp', function(service){
-console.log({service});
+        console.log({service});
         if(service.service_name == serviceName && service.target.port == servicePort)
           chain();
       });
 
       browser.start();
 
-    var foo = cp.spawn("dns-sd", ["-R", serviceName, "_http._tcp", "." , servicePort]);
+    var foo = cp.spawn(DNS_SD, ["-R", serviceName, "_http._tcp", "." , servicePort]);
   })
 
   it("multiple start and stopsupport" , function(){
