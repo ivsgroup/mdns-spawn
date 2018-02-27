@@ -1,13 +1,15 @@
 'use strict';
 
-const cp = require('child_process');
-const Events = require('events');
+const cp      = require('child_process');
+const Events  = require('events');
 
 const queue  = require('async/queue');
 
 const endsWith = require('mout/string/endsWith');
 const once     = require('nyks/function/once');
 const stripEnd = require('nyks/string/stripEnd');
+
+const register = require('./register');
 
 
 RegExp.escape = function(str) { // from stack
@@ -162,8 +164,10 @@ class MDNS_Spawn extends Events.EventEmitter {
   }
 }
 
-MDNS_Spawn.EVENT_DNSSD_ERROR = 'dnssdError';
-MDNS_Spawn.EVENT_SERVICE_UP = 'serviceUp';
+MDNS_Spawn.EVENT_DNSSD_ERROR  = 'dnssdError';
+MDNS_Spawn.EVENT_SERVICE_UP   = 'serviceUp';
 MDNS_Spawn.EVENT_SERVICE_DOWN = 'serviceDown';
+
+MDNS_Spawn.register           = register;
 
 module.exports = MDNS_Spawn;
