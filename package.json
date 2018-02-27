@@ -4,11 +4,12 @@
   "description": "Bonjour discovery",
   "main": "index.js",
   "scripts": {
-    "jscs": "jscs --config=node_modules/ivs-jssc/ivs-node.jscsrc index.js register.js",
-    "jshint": "eslint --config=node_modules/ivs-jssc/ivs-node.eslintrc.js index.js register.js",
+    "jscs": "jscs --config=node_modules/ivs-jssc/ivs-node.jscsrc index.js register.js test",
+    "jshint": "eslint --config=node_modules/ivs-jssc/ivs-node.eslintrc.js index.js register.js test",
     "checkall": "npm run jscs && npm run jshint",
     "mocha": "mocha",
-    "test": " node node_modules/istanbul/lib/cli.js  cover node_modules/mocha/bin/_mocha test/"
+    "test": " npm run checkall && npm run cover",
+    "cover": "node node_modules/istanbul/lib/cli.js  cover node_modules/mocha/bin/_mocha test/"
   },
   "repository": {
     "type": "git",
@@ -29,13 +30,14 @@
   },
   "dependencies": {
     "async": "^2.0.1",
+    "default-gateway": "^2.7.0",
     "ivs-jssc": "^2.1.2",
     "mout": "^1.0.0",
     "nyks": "^3.10.1"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
-    "istanbul": "^0.4.5",
+    "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.1.2"
   },
   "maintainers": [

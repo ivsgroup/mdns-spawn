@@ -1,45 +1,45 @@
 'use strict';
-
+/* eslint-env node, mocha */
 
 const expect = require('expect.js');
-const cp     = require('child_process');
-const once     = require('nyks/function/once');
+
+const now    = require('mout/time/now');
+const once   = require('nyks/function/once');
 
 const MDNS_Spawn = require('../');
-const DNS_SD = "dns-sd.exe";
+const register   = require('../register');
 
-
-describe("Initial test suite for mdns-spawn", function(){
+describe("Initial test suite for mdns-spawn", function() {
 
   this.timeout(4000);
-  var serviceName = "dummy local service", servicePort = 14545;
+  var serviceName = "dummy local service " + now();
+  var servicePort = 14545;
 
+  it("should detect a dummy registration and stop", function(done) {
+    done = once(done);
 
-  it("should detect a dummy registration and stop", function(done){
-    done = once(done)
     var browser = new MDNS_Spawn();
-    
-    var chain = once(function(){
-        browser.on('serviceDown', function(service){
-           if(service.service_name == serviceName)
-              done() ;
-        });
-
-        foo.kill();
+    var chain   = once(function() {
+      browser.on('serviceDown', function(service) {
+        if(service.service_name == serviceName)
+          done();
       });
 
-      browser.on('serviceUp', function(service){
-        console.log({service});
-        if(service.service_name == serviceName && service.target.port == servicePort)
-          chain();
-      });
+      register.kill();
+    });
 
-      browser.start();
+    browser.on('serviceUp', function(service) {
+      console.log({service});
+      if(service.service_name == serviceName && service.target.port == servicePort)
+        chain();
+    });
 
-    var foo = cp.spawn(DNS_SD, ["-R", serviceName, "_http._tcp", "." , servicePort]);
-  })
+    browser.start();
 
-  it("multiple start and stopsupport" , function(){
+    register(serviceName, servicePort, 'tmp_hostname');
+  });
+
+  it("multiple start and stopsupport", function() {
 
     var browser = new MDNS_Spawn();
     browser.start();
@@ -53,7 +53,3 @@ describe("Initial test suite for mdns-spawn", function(){
   });
 
 });
-
-
-
-
