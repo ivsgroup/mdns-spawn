@@ -1,7 +1,7 @@
 "use strict";
 
 const cp      = require('child_process');
-const gateway = require('default-gateway');
+const gateway = require('default-gateway/win32');
 const os      = require('os');
 
 const filter = require('mout/array/filter');
