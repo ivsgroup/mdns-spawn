@@ -12,16 +12,28 @@ const defer  = require('nyks/promise/defer');
 var child_host = null;
 var child_serv = null;
 
+var kill_host = () => {
+  if (child_host)
+    child_host.kill();
+  child_host = null;
+};
+
+var kill_service = () => {
+  if (child_serv)
+    child_serv.kill();
+  child_serv = null;
+};
+
 const service = async (serviceName, servicePort) => {
   let defered = defer();
 
   // kill previous one if it exists
-  service.kill();
+  kill_service();
 
   child_serv = cp.spawn("dns-sd", ["-R", serviceName, "_http._tcp", ".", servicePort]);
 
-  child_serv.stdout.on('data', buf => {
-    console.log(serviceName, "has been registered on", ipv4);
+  child_serv.stdout.on('data', () => {
+    console.log(serviceName, "has been registered");
     defered.resolve();
   });
 
@@ -29,13 +41,7 @@ const service = async (serviceName, servicePort) => {
 
   await defered;
 
-  return {
-    kill : () => {
-      if (child_serv)
-        child_serv.kill();
-      child_serv = null;
-    };
-  };
+  return {kill : kill_service};
 };
 
 const host = async (serviceName, servicePort, hostName) => {
@@ -54,11 +60,11 @@ const host = async (serviceName, servicePort, hostName) => {
   let defered = defer();
 
   // kill previous one if it exists
-  host.kill();
+  kill_host();
 
   child_host = cp.spawn("dns-sd", ["-P", serviceName, "_http._tcp", ".", servicePort, hostName, ipv4]);
 
-  child_host.stdout.on('data', buf => {
+  child_host.stdout.on('data', () => {
     console.log(serviceName, "has been registered on", ipv4);
     defered.resolve();
   });
@@ -67,13 +73,7 @@ const host = async (serviceName, servicePort, hostName) => {
 
   await defered;
 
-  return {
-    kill : () => {
-      if (child_host)
-        child_host.kill();
-      child_host = null;
-    };
-  };
+  return {kill : kill_host};
 };
 
 module.exports = {host, service};
