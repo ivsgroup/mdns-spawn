@@ -28,6 +28,8 @@ describe("Initial test suite for mdns-spawn", function() {
           defered.resolve();
       });
       service_o.kill();
+      //cover multiple try to kill
+      service_o.kill();
     });
 
     browser.on('serviceUp', function(service) {
