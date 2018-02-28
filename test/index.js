@@ -6,8 +6,8 @@ const expect = require('expect.js');
 const now    = require('mout/time/now');
 const once   = require('nyks/function/once');
 
-const MDNS_Spawn = require('../');
-const register   = require('../register');
+const MDNS_Spawn       = require('../');
+const register_service = require('../register').service;
 
 describe("Initial test suite for mdns-spawn", function() {
 
@@ -36,7 +36,7 @@ describe("Initial test suite for mdns-spawn", function() {
 
     browser.start();
 
-    register(serviceName, servicePort, 'tmp_hostname');
+    register_service(serviceName, servicePort);
   });
 
   it("multiple start and stopsupport", function() {

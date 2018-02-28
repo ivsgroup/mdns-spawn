@@ -9,9 +9,6 @@ const endsWith = require('mout/string/endsWith');
 const once     = require('nyks/function/once');
 const stripEnd = require('nyks/string/stripEnd');
 
-const register = require('./register');
-
-
 RegExp.escape = function(str) { // from stack
   str = str.replace(/ /g, "\\032");
   /*eslint no-useless-escape: 0*/
@@ -168,6 +165,6 @@ MDNS_Spawn.EVENT_DNSSD_ERROR  = 'dnssdError';
 MDNS_Spawn.EVENT_SERVICE_UP   = 'serviceUp';
 MDNS_Spawn.EVENT_SERVICE_DOWN = 'serviceDown';
 
-MDNS_Spawn.register           = register;
+MDNS_Spawn.register           = require('./register');
 
 module.exports = MDNS_Spawn;
