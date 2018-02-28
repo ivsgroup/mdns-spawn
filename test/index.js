@@ -5,27 +5,31 @@ const expect = require('expect.js');
 
 const now    = require('mout/time/now');
 const once   = require('nyks/function/once');
+const defer  = require('nyks/promise/defer');
 
-const MDNS_Spawn = require('../');
-const register   = require('../register');
+const MDNS_Spawn       = require('../');
+const register_service = require('../register').service;
 
 describe("Initial test suite for mdns-spawn", function() {
 
   this.timeout(4000);
   var serviceName = "dummy local service " + now();
   var servicePort = 14545;
+  var service_o   = null;
 
-  it("should detect a dummy registration and stop", function(done) {
-    done = once(done);
+  it("should detect a dummy registration and stop", async  function() {
+
+    var defered = defer();
 
     var browser = new MDNS_Spawn();
     var chain   = once(function() {
       browser.on('serviceDown', function(service) {
         if(service.service_name == serviceName)
-          done();
+          defered.resolve();
       });
-
-      register.kill();
+      service_o.kill();
+      //cover multiple try to kill
+      service_o.kill();
     });
 
     browser.on('serviceUp', function(service) {
@@ -36,7 +40,8 @@ describe("Initial test suite for mdns-spawn", function() {
 
     browser.start();
 
-    register(serviceName, servicePort, 'tmp_hostname');
+    service_o = await register_service(serviceName, servicePort);
+    await defered;
   });
 
   it("multiple start and stopsupport", function() {
