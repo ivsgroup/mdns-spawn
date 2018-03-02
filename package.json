@@ -1,6 +1,6 @@
 {
   "name": "mdns-spawn",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Bonjour discovery",
   "main": "index.js",
   "scripts": {
@@ -31,13 +31,13 @@
   "dependencies": {
     "async": "^2.0.1",
     "default-gateway": "^2.7.0",
-    "ivs-jssc": "^2.1.2",
     "mout": "^1.0.0",
     "nyks": "^3.10.1"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
     "istanbul": "^1.1.0-alpha.1",
+    "ivs-jssc": "^2.1.2",
     "mocha": "^3.1.2"
   },
   "maintainers": [
