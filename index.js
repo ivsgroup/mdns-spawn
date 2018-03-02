@@ -165,6 +165,4 @@ MDNS_Spawn.EVENT_DNSSD_ERROR  = 'dnssdError';
 MDNS_Spawn.EVENT_SERVICE_UP   = 'serviceUp';
 MDNS_Spawn.EVENT_SERVICE_DOWN = 'serviceDown';
 
-MDNS_Spawn.register           = require('./register');
-
 module.exports = MDNS_Spawn;
