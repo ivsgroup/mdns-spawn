@@ -83,7 +83,7 @@ const resolve_service = function(task, callback) {
       /* istanbul ignore if  */
       if(err)
         return callback(err);
-      callback(null, {host : host_addr,hostname : res[1], port : Number(res[2])});
+      callback(null, {host : host_addr, hostname : res[1], port : Number(res[2])});
     });
   });
 };
@@ -144,17 +144,18 @@ class MDNS_Spawn extends Events.EventEmitter {
         var operation    = res[1];
         var service_name = res[2];
 
-        var service =  {service_name : service_name};
-        if(operation == "Add")
+        var service =  {service_name};
+        if(operation == "Add") {
           resolve_serviceq({service_name, service_type : self._service_type, domain : self._domain }, function(err, result) {
             /* istanbul ignore else */
             if(!err)
               service.target  = result;
             self.emit(MDNS_Spawn.EVENT_SERVICE_UP, service);
           });
+        }
 
         if(operation == "Rmv")
-          self.emit(MDNS_Spawn.EVENT_SERVICE_DOWN,service);
+          self.emit(MDNS_Spawn.EVENT_SERVICE_DOWN, service);
 
       });
     });
@@ -164,7 +165,5 @@ class MDNS_Spawn extends Events.EventEmitter {
 MDNS_Spawn.EVENT_DNSSD_ERROR  = 'dnssdError';
 MDNS_Spawn.EVENT_SERVICE_UP   = 'serviceUp';
 MDNS_Spawn.EVENT_SERVICE_DOWN = 'serviceDown';
-
-MDNS_Spawn.register           = require('./register');
 
 module.exports = MDNS_Spawn;

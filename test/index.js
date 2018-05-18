@@ -48,7 +48,7 @@ describe("Initial test suite for mdns-spawn", function() {
 
     var browser = new MDNS_Spawn();
     browser.start();
-    var pid = browser._proc.pid ;
+    var pid = browser._proc.pid;
     browser.start();
     expect(browser._proc.pid).to.be(pid);
     browser.stop();
