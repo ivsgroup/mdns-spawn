@@ -24,7 +24,7 @@ const service = async (serviceName, servicePort) => {
 
   return {
     kill : () => {
-      if (child)
+      if(child)
         child.kill();
       child = null;
     }
@@ -38,7 +38,7 @@ const host = async (serviceName, servicePort, hostName) => {
   let default_gateway = await gateway.v4();
   let interface_name  = default_gateway.interface;
 
-  if (!interfaces[interface_name])
+  if(!interfaces[interface_name])
     throw `No interface ${interface_name} found.`;
 
   var ipv4 = map(filter(interfaces[interface_name], (address) => address.family == 'IPv4' && address.address !== '127.0.0.1'), (addr) => addr.address);
@@ -57,7 +57,7 @@ const host = async (serviceName, servicePort, hostName) => {
 
   return {
     kill : () => {
-      if (child)
+      if(child)
         child.kill();
       child = null;
     }
