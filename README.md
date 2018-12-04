@@ -15,11 +15,11 @@ npm install mdns-spawn
 const MDNS_Spawn = require('mdns-spawn');
 
 var browser = new MDNS_Spawn();
-browser.addEvent('serviceUp', function(service){
+browser.on('serviceUp', function(service){
   console.log(service);
 });
 
-browser.addEvent('serviceDown', function(service){
+browser.on('serviceDown', function(service){
   console.log("Service down ", service);
 });
 
