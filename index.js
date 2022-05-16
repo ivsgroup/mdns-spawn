@@ -16,6 +16,10 @@ RegExp.escape = function(str) { // from stack
   return str;
 };
 
+const opts = {
+  windowsHide  : true,
+};
+
 
 var DNS_SD = "dns-sd.exe";
 
@@ -31,7 +35,7 @@ const resolve_hostname = function(host_name, callback) {
 
   callback = once(callback);
   var reg = [RegExp.escape(host_name), "\\.?\\s+", "([0-9.]+)"];
-  var lookup = cp.spawn(DNS_SD, ["-G ", "v4", host_name]);
+  var lookup = cp.spawn(DNS_SD, ["-G ", "v4", host_name], opts);
 
   var splitter = new RegExp(reg.join(''));
   setTimeout(function() {
@@ -61,7 +65,7 @@ const resolve_service = function(task, callback) {
   callback = once(callback);
 
   var reg = [RegExp.escape(service_name), "\\.", RegExp.escape(service_type), RegExp.escape(domain), "\\s+", "can be reached at\\s+(.*?):([0-9]+)"];
-  var lookup = cp.spawn(DNS_SD, ["-L ", service_name, service_type, domain]);
+  var lookup = cp.spawn(DNS_SD, ["-L ", service_name, service_type, domain], opts);
 
   var splitter = new RegExp(reg.join(''));
 
@@ -123,7 +127,7 @@ class MDNS_Spawn extends Events.EventEmitter {
     if(this._proc)
       return; //already running !
 
-    this._proc = cp.spawn(DNS_SD, ["-B", this._service_type, this._domain]);
+    this._proc = cp.spawn(DNS_SD, ["-B", this._service_type, this._domain], opts);
 
     var splitter = new RegExp(reg.join(''));
     var buffer = "";
